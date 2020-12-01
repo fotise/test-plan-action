@@ -1,0 +1,13 @@
+name: 'Test Plan'
+description: 'Generate a test plan'
+inputs:
+  name:  
+    description: 'Name of the project board to create'
+    required: true
+    default: 'Test Campaign'
+runs:
+  using: 'node12'
+  main: 'index.js'
+branding:
+  icon: 'briefcase'  
+  color: 'green'

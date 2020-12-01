@@ -1,0 +1,27 @@
+{
+  "name": "test-plan-action",
+  "version": "1.0.0",
+  "description": "Manage you test plans with an automated project board",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helaili/test-plan-action.git"
+  },
+  "keywords": [
+    "actions",
+    "test"
+  ],
+  "author": "Alain Hélaïli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/helaili/test-plan-action/issues"
+  },
+  "homepage": "https://github.com/helaili/test-plan-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}
