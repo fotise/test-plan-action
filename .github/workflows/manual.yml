@@ -38,7 +38,7 @@ jobs:
           const {projects: data} = await github.projects.listForRepo({
             ...context.repo
           });
-          for (let project of projects.data) {
+          for (let project of projects) {
             github.projects.delete({project_id: project.id})
           } 
 
