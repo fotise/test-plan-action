@@ -35,9 +35,8 @@ const fm = require('front-matter')
           name: column
         }).then(createColumnResponse => {
           core.debug(JSON.stringify(createColumnResponse.data))
-          console.log(index)
-          console.log(createColumnResponse.data)
-          if (index === 0) {
+          
+          if (index == 0) {
             firstColId = createColumnResponse.data.id
             core.debug(`First column id is ${firstColId}`)
           }
