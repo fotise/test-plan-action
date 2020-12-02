@@ -17,11 +17,11 @@ const fs   = require('fs')
         name: configDoc.name
     }
 
-    const projectParamsStr = JSON.stringify(projectParams)
-    core.debug(`Creating "${configDoc.name}" project board with params ${projectParamsStr}`)
+    core.debug(`Creating "${configDoc.name}" project board in ${projectParams.owner}/${projectParams.repo}`)
 
     octokit.projects.createForRepo(projectParams).then(createRepoResponse => {
-      core.debug(`Response: ${createRepoResponse}`)
+      const projectStr = JSON.stringify(createRepoResponse)
+      core.debug(`Response: ${projectStr}`)
     }).catch(createRepoError => {
       core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
     })
