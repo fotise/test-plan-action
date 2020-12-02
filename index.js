@@ -35,7 +35,7 @@ const fs   = require('fs')
           core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
         })
 
-        var files = fs.readdirSync(configDoc.test-folder)
+        var files = fs.readdirSync(configDoc.folder)
         for (let file of files) {
           core.debug(`Loading test case file ${file}`)
         }        
