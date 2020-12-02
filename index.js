@@ -18,13 +18,15 @@ const fm = require('front-matter')
         name: configDoc.name
     }
 
+    let firstColId
+
     core.debug(`Creating "${configDoc.name}" project board in ${projectParams.owner}/${projectParams.repo}`)
 
     octokit.projects.createForRepo(projectParams).then(createRepoResponse => {
       const projectId = createRepoResponse.data.id
       core.debug(`Project id: ${projectId}`)
 
-      for (let column of configDoc.columns) {
+      for (let column, index of configDoc.columns) {
         core.debug(`Adding column ${column}`)
 
         octokit.projects.createColumn({
@@ -32,6 +34,10 @@ const fm = require('front-matter')
           name: column
         }).then(createColumnResponse => {
           core.debug(JSON.stringify(createColumnResponse.data))
+          if (index === 0) {
+            firstColId = createColumnResponse.data.id
+            core.debug(`First column id is ${firstColId}`)
+          }
         }).catch(createColumnError => {
           core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
         })        
@@ -43,6 +49,7 @@ const fm = require('front-matter')
         fs.readFile(`${configDoc.folder}/${file}`, 'utf8', (err, data) => {
           var content = fm(data)
           console.log(content)
+          // TODO: Create an issue
         })
       }
       
