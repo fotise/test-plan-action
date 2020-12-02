@@ -33,7 +33,7 @@ jobs:
     - name: Clean up
       uses: actions/github-script@v3
       with:
-        github-token: ${{ steps.temp_token.outputs.token }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const projects = await octokit.projects.listForRepo({
             ...context.repo
