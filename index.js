@@ -6,13 +6,14 @@ const github = require('@actions/github')
     const ghToken = core.getInput('token')
     const octokit = github.getOctokit(ghToken)
     const context = github.context
-
+    
     const projectParams = {
         ...context.repo,
         projectName,
     }
-
-    core.info(`Creating "${projectName}" project board with params ${projectParams}`)
+    const projectParamsStr = JSON.stringify(projectParams)
+    
+    core.info(`Creating "${projectName}" project board with params ${projectParamsStr}`)
 
     octokit.projects.createForRepo(projectParams, (response) => {
       core.debug(`Response: ${response}`)
