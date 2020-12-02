@@ -1,4 +1,5 @@
 name: Test Campaign
+test-folder: test-cases
 columns:
 - New
 - Active

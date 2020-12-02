@@ -34,6 +34,12 @@ const fs   = require('fs')
         }).catch(createColumnError => {
           core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
         })
+
+        var files = fs.readdirSync(configDoc.test-folder)
+        for (let file of files) {
+          core.debug(`Loading test case file ${file}`)
+        }        
+
       }
     }).catch(createRepoError => {
       core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
