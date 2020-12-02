@@ -10,7 +10,7 @@ const fs   = require('fs')
     const context = github.context
     
     const configDoc = yaml.safeLoad(fs.readFileSync(config, 'utf8'));
-    core.debug(`Loaded config ${configDoc}`)
+    core.debug(`Loaded config ${JSON.stringify(configDoc)}`)
 
     const projectParams = {
         ...context.repo,
@@ -24,9 +24,13 @@ const fs   = require('fs')
       core.debug(`Project id: ${projectId}`)
 
       for (let column in configDoc.columns) {
+        core.debug(`Adding column ${column}`)
+
         octokit.projects.createColumn({
           projectId,
           column
+        }).then(createColumnResponse => {
+          core.debug(JSON.stringify(createColumnResponse.data))
         })
       }
     }).catch(createRepoError => {
