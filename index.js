@@ -40,7 +40,7 @@ const fm = require('front-matter')
       var files = fs.readdirSync(configDoc.folder)
       for (let file of files) {
         core.debug(`Loading test case file ${file}`)
-        fs.readFile(`${configDoc.folder}/${file}`, 'utf8').then(data => {
+        fs.readFile(`${configDoc.folder}/${file}`, 'utf8', (err, data) => {
           var content = fm(data)
           console.log(content)
         })
