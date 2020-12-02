@@ -4,8 +4,8 @@ const github = require('@actions/github')
   try {
     const projectName = core.getInput('name')
     const ghToken = core.getInput('token')
+    const octokit = github.getOctokit(ghToken)
     const context = github.context
-    const octokit = new github.GitHub(ghToken)
     
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
