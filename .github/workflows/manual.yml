@@ -38,8 +38,11 @@ jobs:
           const projects = await github.projects.listForRepo({
             ...context.repo
           });
-          console.log(projects.data)
-          
+          for (let project of projects.data) {
+            github.projects.delete({
+              project.id
+            });
+          } 
 
     - name: Generate Test Campaign
       uses: ./
