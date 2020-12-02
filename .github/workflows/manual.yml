@@ -39,9 +39,7 @@ jobs:
             ...context.repo
           });
           for (let project of projects.data) {
-            github.projects.delete({
-              project.id
-            });
+            console.log(project)
           } 
 
     - name: Generate Test Campaign
