@@ -12,12 +12,14 @@ const github = require('@actions/github')
     core.debug(`The event payload: ${payload}`)
     core.info(`Creating "${projectName}" project board`)
 
-    const response  = await octokit.projects.createForRepo({
+    octokit.projects.createForRepo({
       ...context.repo,
       projectName,
+    }, (response) => {
+      core.debug(`Response: ${response}`)
     })
 
-    core.debug(`Response: ${response}`)
+    
 
   } catch (error) {
     core.setFailed(error.message)
