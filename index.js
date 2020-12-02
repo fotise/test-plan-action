@@ -18,7 +18,7 @@ const fs   = require('fs')
     }
 
     const projectParamsStr = JSON.stringify(projectParams)
-    core.debug(`Creating "${projectName}" project board with params ${projectParamsStr}`)
+    core.debug(`Creating "${configDoc.name}" project board with params ${projectParamsStr}`)
 
     octokit.projects.createForRepo(projectParams).then(createRepoResponse => {
       core.debug(`Response: ${createRepoResponse}`)
