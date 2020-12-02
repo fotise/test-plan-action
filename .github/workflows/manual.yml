@@ -35,11 +35,11 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const projects = await github.projects.listForRepo({
+          const {projects: data} = await github.projects.listForRepo({
             ...context.repo
           });
           for (let project of projects.data) {
-            console.log(project)
+            github.projects.delete({project_id: project.id})
           } 
 
     - name: Generate Test Campaign
