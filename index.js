@@ -13,10 +13,12 @@ async function run() {
     core.debug(`The event payload: ${payload}`)
     core.info(`Creating "${projectName}" project board`)
 
-    octokit.projects.createForRepo({
+    const response  = await octokit.projects.createForRepo({
       ...context.repo,
       projectName,
     })
+
+    core.debug(`Response: ${response}`)
 
   } catch (error) {
     core.setFailed(error.message)
