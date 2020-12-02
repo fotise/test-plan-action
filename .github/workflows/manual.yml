@@ -38,12 +38,13 @@ jobs:
           const projects = await github.projects.listForRepo({
             ...context.repo
           });
+          console.log(projects)
           
 
     - name: Generate Test Campaign
       uses: ./
       with:
-        name: ${{ github.event.inputs.name }}
+        name: ${{ github.event.inputs.name || 'Test Campaign'}}
         token: ${{ secrets.GITHUB_TOKEN }}
 
     
