@@ -9,7 +9,7 @@ const github = require('@actions/github')
     
     const projectParams = {
         ...context.repo,
-        projectName
+        name: projectName
     }
 
     const projectParamsStr = JSON.stringify(projectParams)
@@ -18,7 +18,7 @@ const github = require('@actions/github')
     octokit.projects.createForRepo(projectParams).then(createRepoResponse => {
       core.debug(`Response: ${createRepoResponse}`)
     }).catch(createRepoError => {
-      core.setFailed(createRepoError.message)
+      core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
     })
 
   } catch (error) {
