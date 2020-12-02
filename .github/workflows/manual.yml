@@ -38,7 +38,7 @@ jobs:
           const projects = await github.projects.listForRepo({
             ...context.repo
           });
-          console.log(projects)
+          console.log(projects.data)
           
 
     - name: Generate Test Campaign
