@@ -31,6 +31,8 @@ const fs   = require('fs')
           column
         }).then(createColumnResponse => {
           core.debug(JSON.stringify(createColumnResponse.data))
+        }).catch(createColumnError => {
+          core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
         })
       }
     }).catch(createRepoError => {
