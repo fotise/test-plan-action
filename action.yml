@@ -5,6 +5,9 @@ inputs:
     description: 'Name of the project board to create'
     required: true
     default: 'Test Campaign'
+  token: 
+    description: 'The GITHUB_TOKEN secret'
+    required: true
 runs:
   using: 'node12'
   main: 'index.js'
