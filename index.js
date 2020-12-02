@@ -7,9 +7,11 @@ const github = require('@actions/github')
     const octokit = github.getOctokit(ghToken)
     const context = github.context
     
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    core.debug(`The event payload: ${payload}`)
+    const payloadStr = JSON.stringify(context.payload, undefined, 2)
+    core.debug(`The event payload: ${payloadStr}`)
+    const repoStr = JSON.stringify(context.repo, undefined, 2)
+    core.debug(`The repo info: ${repoStr}`)
+
     core.info(`Creating "${projectName}" project board`)
 
     octokit.projects.createForRepo({

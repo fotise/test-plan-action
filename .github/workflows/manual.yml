@@ -29,4 +29,5 @@ jobs:
     - name: Generate Test Campaign
       uses: ./
       with:
+        name: ${{ github.event.inputs.name }}
         token: ${{ secrets.GITHUB_TOKEN }}
