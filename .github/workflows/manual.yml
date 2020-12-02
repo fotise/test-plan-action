@@ -38,13 +38,7 @@ jobs:
           const projects = await octokit.projects.listForRepo({
             ...context.repo
           });
-          for (let project of projects) {
-            octokit.projects.delete({
-              project.id
-            });
-          } 
           
-    
     - name: Generate Test Campaign
       uses: ./
       with:
