@@ -2,6 +2,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const yaml = require('js-yaml')
 const fs   = require('fs')
+const fm = require('front-matter')
 
   try {
     const config = core.getInput('config')
@@ -33,14 +34,18 @@ const fs   = require('fs')
           core.debug(JSON.stringify(createColumnResponse.data))
         }).catch(createColumnError => {
           core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
-        })
-
-        var files = fs.readdirSync(configDoc.folder)
-        for (let file of files) {
-          core.debug(`Loading test case file ${file}`)
-        }        
-
+        })        
       }
+
+      var files = fs.readdirSync(configDoc.folder)
+      for (let file of files) {
+        core.debug(`Loading test case file ${file}`)
+        fs.readFile(`${configDoc.folder}/${file}`, 'utf8').then(data => {
+          var content = fm(data)
+          console.log(content)
+        })
+      }
+      
     }).catch(createRepoError => {
       core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
     })
