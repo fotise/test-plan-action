@@ -39,14 +39,12 @@ jobs:
             ...context.repo
           });
           for (let project of projects.data) {
-            console.log(project)
             github.projects.delete({project_id: project.id})
           } 
 
     - name: Generate Test Campaign
       uses: ./
       with:
-        name: ${{ github.event.inputs.name || 'Test Campaign'}}
         token: ${{ secrets.GITHUB_TOKEN }}
 
     

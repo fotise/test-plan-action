@@ -1,15 +1,20 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
+const yaml = require('js-yaml')
+const fs   = require('fs')
 
   try {
-    const projectName = core.getInput('name')
+    const config = core.getInput('config')
     const ghToken = core.getInput('token')
     const octokit = github.getOctokit(ghToken)
     const context = github.context
     
+    const configDoc = yaml.safeLoad(fs.readFileSync(config, 'utf8'));
+    core.debug(`Loaded config ${configDoc}`)
+
     const projectParams = {
         ...context.repo,
-        name: projectName
+        name: configDoc.name
     }
 
     const projectParamsStr = JSON.stringify(projectParams)

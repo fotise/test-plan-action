@@ -1,10 +1,10 @@
 name: 'Test Plan'
 description: 'Generate a test plan'
 inputs:
-  name:  
-    description: 'Name of the project board to create'
+  config:  
+    description: 'Campaign config file'
     required: true
-    default: 'Test Campaign'
+    default: 'campaign-config.yml'
   token: 
     description: 'The GITHUB_TOKEN secret'
     required: true
