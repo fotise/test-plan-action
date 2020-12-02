@@ -1,7 +1,6 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 
-async function run() {
   try {
     const projectName = core.getInput('name')
     const ghToken = core.getInput('token')
@@ -23,4 +22,3 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message)
   }
-}
