@@ -27,8 +27,8 @@ const fs   = require('fs')
         core.debug(`Adding column ${column}`)
 
         octokit.projects.createColumn({
-          projectId,
-          column
+          project_id: projectId,
+          name: column
         }).then(createColumnResponse => {
           core.debug(JSON.stringify(createColumnResponse.data))
         }).catch(createColumnError => {
