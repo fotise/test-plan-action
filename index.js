@@ -20,8 +20,15 @@ const fs   = require('fs')
     core.debug(`Creating "${configDoc.name}" project board in ${projectParams.owner}/${projectParams.repo}`)
 
     octokit.projects.createForRepo(projectParams).then(createRepoResponse => {
-      const projectStr = JSON.stringify(createRepoResponse)
-      core.debug(`Response: ${projectStr}`)
+      const projectId = createRepoResponse.data.id
+      core.debug(`Project id: ${projectId}`)
+
+      for (let column in configDoc.columns) {
+        octokit.projects.createColumn({
+          projectId,
+          column
+        })
+      }
     }).catch(createRepoError => {
       core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
     })
