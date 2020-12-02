@@ -26,7 +26,8 @@ const fm = require('front-matter')
       const projectId = createRepoResponse.data.id
       core.debug(`Project id: ${projectId}`)
 
-      for (let [column, index] of configDoc.columns.entries) {
+      for (let index in configDoc.columns) {
+        const column = configDoc.columns[index]
         core.debug(`Adding column ${column}`)
 
         octokit.projects.createColumn({
