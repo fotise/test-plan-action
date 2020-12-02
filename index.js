@@ -24,7 +24,6 @@ const fm = require('front-matter')
 
     octokit.projects.createForRepo(projectParams).then(createRepoResponse => {
       const projectId = createRepoResponse.data.id
-      core.debug(`Project id: ${projectId}`)
 
       for (let index in configDoc.columns) {
         const column = configDoc.columns[index]
@@ -33,12 +32,9 @@ const fm = require('front-matter')
         octokit.projects.createColumn({
           project_id: projectId,
           name: column
-        }).then(createColumnResponse => {
-          core.debug(JSON.stringify(createColumnResponse.data))
-          
+        }).then(({ data }) => {
           if (index == 0) {
-            firstColId = createColumnResponse.data.id
-            core.debug(`First column id is ${firstColId}`)
+            firstColId = data.id
           }
         }).catch(createColumnError => {
           core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
