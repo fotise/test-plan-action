@@ -5,6 +5,9 @@ name: Manual workflow
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
+  push:
+     branches:
+      - master
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
@@ -26,8 +29,26 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - uses: actions/checkout@v2
+
+    - name: Clean up
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ steps.temp_token.outputs.token }}
+        script: |
+          const projects = await octokit.projects.listForRepo({
+            ...context.repo
+          });
+          for (let project of projects) {
+            octokit.projects.delete({
+              project.id
+            });
+          } 
+          
+    
     - name: Generate Test Campaign
       uses: ./
       with:
         name: ${{ github.event.inputs.name }}
         token: ${{ secrets.GITHUB_TOKEN }}
+
+    
