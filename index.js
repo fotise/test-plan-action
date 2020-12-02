@@ -6,22 +6,17 @@ const github = require('@actions/github')
     const ghToken = core.getInput('token')
     const octokit = github.getOctokit(ghToken)
     const context = github.context
-    
-    const payloadStr = JSON.stringify(context.payload, undefined, 2)
-    core.debug(`The event payload: ${payloadStr}`)
-    const repoStr = JSON.stringify(context.repo, undefined, 2)
-    core.debug(`The repo info: ${repoStr}`)
 
-    core.info(`Creating "${projectName}" project board`)
+    const projectParams = {
+        ...context.repo,
+        projectName,
+    }
 
-    octokit.projects.createForRepo({
-      ...context.repo,
-      projectName,
-    }, (response) => {
+    core.info(`Creating "${projectName}" project board with params ${projectParams}`)
+
+    octokit.projects.createForRepo(projectParams, (response) => {
       core.debug(`Response: ${response}`)
     })
-
-    
 
   } catch (error) {
     core.setFailed(error.message)
