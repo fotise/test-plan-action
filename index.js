@@ -23,7 +23,7 @@ const fs   = require('fs')
       const projectId = createRepoResponse.data.id
       core.debug(`Project id: ${projectId}`)
 
-      for (let column in configDoc.columns) {
+      for (let column of configDoc.columns) {
         core.debug(`Adding column ${column}`)
 
         octokit.projects.createColumn({
