@@ -64,11 +64,11 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
       }
 
       if (content.attributes.assignees) {
-        issue.assignees = content.attributes.assignees.split(',')
+        issue.assignees = content.attributes.assignees.split(',').map(s => s.trim())
       }
 
       if (content.attributes.labels) {
-        issue.labels = content.attributes.labels.split(',')
+        issue.labels = content.attributes.labels.split(',').map(s => s.trim())
       }
 
       core.debug(issue)
