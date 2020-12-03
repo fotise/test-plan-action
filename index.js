@@ -56,14 +56,22 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
       var content = fm(data)
       core.debug(content)
       
-      octokit.issues.create({
+      const issue = {
         owner: owner,
         repo: repo, 
         title: content.attributes.title,
-        assignees: content.attributes.assignees,
-        labels: content.attributes.labels,
         body: content.body,
-      }).then(({ issueData }) => {
+      }
+
+      if (content.attributes.assignees) {
+        issue.assignees = content.attributes.assignees.split(',')
+      }
+
+      if (content.attributes.labels) {
+        issue.labels = content.attributes.labels.split(',')
+      }
+
+      octokit.issues.create(issue).then(({ issueData }) => {
         octokit.projects.createCard({
           column_id: columnId,
           content_id: issueData.id,
@@ -76,7 +84,6 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
       }).catch(issueError => {
         core.setFailed(issueError.message)
       })
-      
     })
   }
 }
