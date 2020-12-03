@@ -72,6 +72,7 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
       }
 
       octokit.issues.create(issue).then(({ data }) => {
+        /*
         octokit.projects.createCard({
           column_id: columnId,
           content_id: data.id,
@@ -81,8 +82,9 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         }).catch(cardError => {
           core.setFailed(cardError.message)
         })
+        */
       }).catch(issueError => {
-        core.setFailed(issueError.message)
+        core.setFailed(`Failed creating the issue: ${issueError.message}`)
       })
     })
   }
