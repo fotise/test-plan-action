@@ -3,7 +3,6 @@ const github = require('@actions/github')
 const yaml = require('js-yaml')
 const fs   = require('fs')
 const fm = require('front-matter')
-const { createDecipher } = require('crypto')
 
 try {
   const config = core.getInput('config')
@@ -33,7 +32,7 @@ try {
         name: column
       }).then(({ data }) => {
         if (index == 0) {
-          generateIssues(configDoc.folder, projectParams.owner, projectParams.repo, data.id)
+          generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, data.id)
         }
       }).catch(createColumnError => {
         core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
@@ -48,11 +47,11 @@ try {
 }
 
 
-function generateIssues(folder, owner, repo, columnId) {
+function generateIssues(octokit, folder, owner, repo, columnId) {
   var files = fs.readdirSync(folder)
   for (let file of files) {
     core.debug(`Loading test case file ${file}`)
-    
+
     fs.readFile(`${folder}/${file}`, 'utf8', (err, data) => {
       var content = fm(data)
       core.debug(content)
