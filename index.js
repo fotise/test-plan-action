@@ -81,7 +81,7 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
 
         octokit.projects.createCard({
           column_id: columnId,
-          content_id: 'https://api.github.com/repos/helaili/test-plan-action/issues/13',
+          content_url: 'https://api.github.com/repos/helaili/test-plan-action/issues/13',
           content_type: 'issue',
         }).then(({ data }) => {
           core.debug(cardData)
