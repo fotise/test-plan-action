@@ -31,15 +31,14 @@ try {
       octokit.projects.createColumn({
         project_id: projectId,
         name: column
-      }).then(({ columnData }) => {
+      }).then(({ data }) => {
         if (index == 0) {
-          generateIssues(configDoc.folder, columnData.id)
+          generateIssues(configDoc.folder, projectParams.owner, projectParams.repo, data.id)
         }
       }).catch(createColumnError => {
         core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
       })        
     }
-    
   }).catch(createRepoError => {
     core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
   })
@@ -56,7 +55,7 @@ function generateIssues(folder, owner, repo, columnId) {
     fs.readFile(`${configDoc.folder}/${file}`, 'utf8', (err, data) => {
       var content = fm(data)
       console.log(content)
-      /*
+      
       octokit.issues.create({
         owner: owner,
         repo: repo, 
@@ -77,7 +76,7 @@ function generateIssues(folder, owner, repo, columnId) {
       }).error( issueError => {
         core.setFailed(issueError.message)
       })
-      */
+      
     })
   }
 }
