@@ -56,6 +56,7 @@ function generateIssues(folder, owner, repo, columnId) {
     fs.readFile(`${configDoc.folder}/${file}`, 'utf8', (err, data) => {
       var content = fm(data)
       console.log(content)
+      /*
       octokit.issues.create({
         owner: owner,
         repo: repo, 
@@ -76,6 +77,7 @@ function generateIssues(folder, owner, repo, columnId) {
       }).error( issueError => {
         core.setFailed(issueError.message)
       })
+      */
     })
   }
 }
