@@ -82,6 +82,7 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         octokit.projects.createCard({
           column_id: columnId,
           content_id: data.id,
+          note: '',
           content_type: 'issue',
         }).then(({ data }) => {
           core.debug(cardData)
