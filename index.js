@@ -52,9 +52,10 @@ function generateIssues(folder, owner, repo, columnId) {
   var files = fs.readdirSync(folder)
   for (let file of files) {
     core.debug(`Loading test case file ${file}`)
-    fs.readFile(`${configDoc.folder}/${file}`, 'utf8', (err, data) => {
+    
+    fs.readFile(`${folder}/${file}`, 'utf8', (err, data) => {
       var content = fm(data)
-      console.log(content)
+      core.debug(content)
       
       octokit.issues.create({
         owner: owner,
