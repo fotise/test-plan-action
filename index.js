@@ -31,6 +31,8 @@ try {
         project_id: projectId,
         name: column
       }).then(({ data }) => {
+        core.debug(data)
+
         if (index == 0) {
           generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, data.id)
         }
@@ -78,7 +80,7 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
 
         octokit.projects.createCard({
           column_id: columnId,
-          content_id: data.id,
+          content_id: data.node_id,
           content_type: 'issue',
         }).then(({ data }) => {
           core.debug(cardData)
