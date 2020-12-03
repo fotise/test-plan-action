@@ -71,6 +71,8 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         issue.labels = content.attributes.labels.split(',')
       }
 
+      core.debug(issue)
+
       octokit.issues.create(issue).then(({ data }) => {
         /*
         octokit.projects.createCard({
