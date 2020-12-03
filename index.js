@@ -71,12 +71,12 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         issue.labels = content.attributes.labels.split(',')
       }
 
-      octokit.issues.create(issue).then(({ issueData }) => {
+      octokit.issues.create(issue).then(({ data }) => {
         octokit.projects.createCard({
           column_id: columnId,
-          content_id: issueData.id,
+          content_id: data.id,
           content_type: 'issue',
-        }).then(({ cardData }) => {
+        }).then(({ data }) => {
           core.debug(cardData)
         }).catch(cardError => {
           core.setFailed(cardError.message)
