@@ -63,17 +63,17 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         assignees: content.attributes.assignees,
         labels: content.attributes.labels,
         body: content.body,
-      }).then( ({ issueData }) => {
+      }).then(({ issueData }) => {
         octokit.projects.createCard({
           column_id: columnId,
           content_id: issueData.id,
           content_type: 'issue',
-        }).then( ({ cardData }) => {
+        }).then(({ cardData }) => {
           core.debug(cardData)
-        }).error( cardError => {
+        }).catch(cardError => {
           core.setFailed(cardError.message)
         })
-      }).error( issueError => {
+      }).catch(issueError => {
         core.setFailed(issueError.message)
       })
       
