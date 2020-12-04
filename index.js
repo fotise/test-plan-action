@@ -37,7 +37,7 @@ async function run() {
       let postion
       
       if (index == 0) {
-        generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, column.node_id)
+        generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, column.id)
         postion = 'first'
       } else {
         postion = `after:${previousColumnId}`
@@ -81,29 +81,15 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         issue.labels = content.attributes.labels.split(',').map(s => s.trim())
       }
 
-      const mutation = `mutation($issueId: ID!, $columnId: ID!) { 
-        addProjectCard( 
-          input: { 
-            contentId: $issueId, 
-            projectColumnId: $columnId 
-          }
-        ) {
-          clientMutationId  
-        }
-      }`
-
       octokit.issues.create(issue).then(({ data }) => {
         core.debug(data)
 
-        const variables = {
-          issueId: data.node_id,
-          columnId: columnId
-        }
-        
-        octokit.graphql(mutation, variables).then( data => {
-          core.debug(data)
+        octokit.projects.createCard({
+          column_id: columnId,
+          content_id: data.id,
+          content_type: 'Issue'
         }).catch(cardError => {
-          core.setFailed(`Failed adding the card: ${cardError.message}`)
+          core.setFailed(`Failed to add the issue as a card: ${cardError.message}`)  
         })
       }).catch(issueError => {
         core.setFailed(`Failed creating the issue: ${issueError.message}`)
