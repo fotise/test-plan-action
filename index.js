@@ -32,7 +32,7 @@ try {
         name: column
       }).then(({ data }) => {
         if (index == 0) {
-          generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, data.id)
+          generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, data.node_id)
         }
       }).catch(createColumnError => {
         core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
@@ -76,8 +76,7 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         
         octokit.projects.createCard({
           column_id: columnId,
-          content_id: data.id,
-          content_type: 'issues',
+          content_id: data.node_id
         }).then(({ data }) => {
           core.debug(cardData)
         }).catch(cardError => {
