@@ -22,26 +22,34 @@ try {
 
   octokit.projects.createForRepo(projectParams).then(createRepoResponse => {
     const projectId = createRepoResponse.data.id
+    let previousColumnId 
 
     for (let index in configDoc.columns) {
-      const column = configDoc.columns[index]
-      core.debug(`Adding column ${column}`)
+      const columnName = configDoc.columns[index]
+      core.debug(`Adding column ${columnName}`)
 
-      octokit.projects.createColumn({
+      const column = await octokit.projects.createColumn({
         project_id: projectId,
-        name: column
-      }).then(({ data }) => {
-        octokit.projects.moveColumn({
-          column_id: data.id,
-          position: index
-        })
+        name: columnName
+      })
 
-        if (index == 0) {
-          generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, data.node_id)
-        }
-      }).catch(createColumnError => {
-        core.setFailed(`Failed creating the ${column} column with error: ${createColumnError.message}`)
-      })        
+      let postion
+      
+      if (index == 0) {
+        generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, column.node_id)
+        postion = 'first'
+      } else {
+        postion = `after:${previousColumnId}`
+      }
+
+      previousColumnId  = column.id
+
+      core.debug(`Moving column ${columnName} to position ${postion}`)
+
+      octokit.projects.moveColumn({
+        column_id: column.id,
+        position: postion
+      })
     }
   }).catch(createRepoError => {
     core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
