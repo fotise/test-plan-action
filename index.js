@@ -71,7 +71,7 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         issue.labels = content.attributes.labels.split(',').map(s => s.trim())
       }
 
-      const mutation = `mutation($issueid: ID!, $columnid: ID!) { 
+      const mutation = `mutation($issueId: ID!, $columnId: ID!) { 
         addProjectCard( 
           input: { 
             contentId: $issueId, 
