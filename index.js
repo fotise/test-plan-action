@@ -21,8 +21,8 @@ async function run() {
 
     core.debug(`Creating "${configDoc.name}" project board in ${projectParams.owner}/${projectParams.repo}`)
 
-    const createRepoResponse = await octokit.projects.createForRepo(projectParams)
-    const projectId = createRepoResponse.data.id
+    const { data: project } = await octokit.projects.createForRepo(projectParams)
+    const projectId = project.id
     let previousColumnId 
 
     for (let index in configDoc.columns) {
@@ -37,6 +37,7 @@ async function run() {
       let postion
       
       if (index == 0) {
+        // We are adding the cards to the first column
         generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, column.id)
         postion = 'first'
       } else {
@@ -45,8 +46,9 @@ async function run() {
 
       previousColumnId  = column.id
 
+      // Colums are created in a random order. We need to sort them
       core.debug(`Moving column ${columnName} to position ${postion}`)
-
+      
       octokit.projects.moveColumn({
         column_id: column.id,
         position: postion
@@ -62,8 +64,8 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
   for (let file of files) {
     core.debug(`Loading test case file ${file}`)
 
-    fs.readFile(`${folder}/${file}`, 'utf8', (err, data) => {
-      var content = fm(data)
+    fs.readFile(`${folder}/${file}`, 'utf8', (err, rawFileContent) => {
+      var content = fm(rawFileContent)
       core.debug(content)
       
       const issue = {
@@ -81,12 +83,11 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         issue.labels = content.attributes.labels.split(',').map(s => s.trim())
       }
 
-      octokit.issues.create(issue).then(({ data }) => {
-        core.debug(data)
-
+      octokit.issues.create(issue).then(({ data: issue }) => {
+        // Adding the issue to the project
         octokit.projects.createCard({
           column_id: columnId,
-          content_id: data.id,
+          content_id: issue.id,
           content_type: 'Issue'
         }).catch(cardError => {
           core.setFailed(`Failed to add the issue as a card: ${cardError.message}`)  
