@@ -21,40 +21,37 @@ async function run() {
 
     core.debug(`Creating "${configDoc.name}" project board in ${projectParams.owner}/${projectParams.repo}`)
 
-    octokit.projects.createForRepo(projectParams).then(createRepoResponse => {
-      const projectId = createRepoResponse.data.id
-      let previousColumnId 
+    const createRepoResponse = await octokit.projects.createForRepo(projectParams)
+    const projectId = createRepoResponse.data.id
+    let previousColumnId 
 
-      for (let index in configDoc.columns) {
-        const columnName = configDoc.columns[index]
-        core.debug(`Adding column ${columnName}`)
+    for (let index in configDoc.columns) {
+      const columnName = configDoc.columns[index]
+      core.debug(`Adding column ${columnName}`)
 
-        const column = await octokit.projects.createColumn({
-          project_id: projectId,
-          name: columnName
-        })
+      const column = await octokit.projects.createColumn({
+        project_id: projectId,
+        name: columnName
+      })
 
-        let postion
-        
-        if (index == 0) {
-          generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, column.node_id)
-          postion = 'first'
-        } else {
-          postion = `after:${previousColumnId}`
-        }
-
-        previousColumnId  = column.id
-
-        core.debug(`Moving column ${columnName} to position ${postion}`)
-
-        octokit.projects.moveColumn({
-          column_id: column.id,
-          position: postion
-        })
+      let postion
+      
+      if (index == 0) {
+        generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, column.node_id)
+        postion = 'first'
+      } else {
+        postion = `after:${previousColumnId}`
       }
-    }).catch(createRepoError => {
-      core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
-    })
+
+      previousColumnId  = column.id
+
+      core.debug(`Moving column ${columnName} to position ${postion}`)
+
+      octokit.projects.moveColumn({
+        column_id: column.id,
+        position: postion
+      })
+    }
   } catch (error) {
     core.setFailed(error.message)
   }
