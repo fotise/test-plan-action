@@ -29,7 +29,7 @@ async function run() {
       const columnName = configDoc.columns[index]
       core.debug(`Adding column ${columnName}`)
 
-      const column = await octokit.projects.createColumn({
+      const { data: column } = await octokit.projects.createColumn({
         project_id: projectId,
         name: columnName
       })
