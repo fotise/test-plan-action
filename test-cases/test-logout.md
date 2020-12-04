@@ -17,3 +17,6 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
+**Status of the test**
+- [ ] Reviewed
+- [ ] Approved
