@@ -71,14 +71,34 @@ function generateIssues(octokit, folder, owner, repo, columnId) {
         issue.labels = content.attributes.labels.split(',').map(s => s.trim())
       }
 
+      graphql = graphql.defaults({
+        baseUrl: "https://github-enterprise.acme-inc.com/api",
+        headers: {
+          authorization: `token secret123`,
+        },
+      });
+
+      const mutation = `mutation($issueid: ID!, $columnid: ID!) { 
+        addProjectCard( 
+          input: { 
+            contentId: $issueId, 
+            projectColumnId: $columnId 
+          }
+        ) {
+          clientMutationId  
+        }
+      }`
+
       octokit.issues.create(issue).then(({ data }) => {
         core.debug(data)
         
-        octokit.projects.createCard({
-          column_id: columnId,
-          content_id: data.node_id
-        }).then(({ data }) => {
-          core.debug(cardData)
+        const variables = {
+          issueId: data.node_id,
+          columnId: columnId
+        }
+        
+        octokit.graphql(mutation, variables).then( data => {
+          core.debug(data)
         }).catch(cardError => {
           core.setFailed(`Failed adding the card: ${cardError.message}`)
         })
