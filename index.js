@@ -31,6 +31,11 @@ try {
         project_id: projectId,
         name: column
       }).then(({ data }) => {
+        octokit.projects.moveColumn({
+          column_id: data.id,
+          position: index
+        })
+
         if (index == 0) {
           generateIssues(octokit, configDoc.folder, projectParams.owner, projectParams.repo, data.node_id)
         }
@@ -41,7 +46,6 @@ try {
   }).catch(createRepoError => {
     core.setFailed(`Failed creating the project with error: ${createRepoError.message}`)
   })
-
 } catch (error) {
   core.setFailed(error.message)
 }
